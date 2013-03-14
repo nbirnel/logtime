@@ -54,7 +54,9 @@ def summarize()
     end
 
     if $very_verbose
-        puts $work_p
+        $work_p.each_with_index do |minutes, i|
+            puts "p#{i+1}: #{minutes}"
+        end
     end
 #print summary (total, number of periods, avg & mean lengths, 
 #time from beg to end, % of that time working, 
