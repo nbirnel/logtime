@@ -1,53 +1,107 @@
 #!/bin/ruby
-#
+
 require 'date'
-#
-a = DateTime.new(2013 , 02 , 27 , 12 , 28) - DateTime.new(2013 , 02 , 27 , 10 , 00)
-puts (a * 24 * 60).to_i
+class Array
+    def sum
+        inject(nil) { |sum, x| sum ? sum+x : x }
+    end
 
-a = DateTime.new(2013 , 02 , 27 , 14 , 01) - DateTime.new(2013 , 02 , 27 , 12 , 47)
-puts (a * 24 * 60).to_i
+    def mean
+        length == 0 ? 0 : inject(:+) / length 
+    end
 
-a = DateTime.new(2013 , 02 , 27 , 14 , 31) - DateTime.new(2013 , 02 , 27 , 14 , 16)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 02 , 27 , 14 , 58) - DateTime.new(2013 , 02 , 27 , 14 , 48)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 02 , 27 , 16 , 11) - DateTime.new(2013 , 02 , 27 , 15 , 41)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 02 , 28 , 6 , 58) - DateTime.new(2013 , 02 , 28 , 6 , 51)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 02 , 28 , 8 , 50) - DateTime.new(2013 , 02 , 28 , 8 , 34)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 02 , 28 , 9 , 41) - DateTime.new(2013 , 02 , 28 , 9 , 00)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 02 , 28 , 15 , 55) - DateTime.new(2013 , 02 , 28 , 14 , 31)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 01 , 9 , 29) - DateTime.new(2013 , 03 , 01 , 8 , 45)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 01 , 10 , 21) - DateTime.new(2013 , 03 , 01 , 9 , 49)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 01 , 12 , 13) - DateTime.new(2013 , 03 , 01 , 12 , 10)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 01 , 12 , 58) - DateTime.new(2013 , 03 , 01 , 12 , 38)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 04 , 6 , 47) - DateTime.new(2013 , 03 , 04 , 6 , 45)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 04 , 8 , 39) - DateTime.new(2013 , 03 , 04 , 8 , 26)
-puts (a * 24 * 60).to_i
-
-a = DateTime.new(2013 , 03 , 04 , 15 , 59) - DateTime.new(2013 , 03 , 04 , 15 , 53)
-puts (a * 24 * 60).to_i
+    def median
+        len = length
+        sorted = sort
+        len % 2 == 1 ? sorted[len/2] : (sorted[len/2 -1] + sorted[len/2]) / 2
+    end
+end
 
 
+def accumulate(start, stop)
+    $work_p.push(((stop - start) * MIN_P_HR * HR_P_DAY ).to_i)
+end
+
+def parsetime(timestr)
+    a = timestr.split($tdelim)
+    
+    t = Hash.new
+    t["y"] = a[0].to_i
+    t["m"] = a[1].to_i
+    t["d"] = a[2].to_i
+    t["h"] = a[3].to_i
+    if t["h"] == 12
+        t["h"] = 0
+    end
+    if a[5] == "PM"
+        t["h"] = t["h"] + 12
+    end
+    t["M"] = a[4].to_i
+
+    return DateTime.new(t["y"], t["m"], t["d"], t["h"], t["M"] ) 
+end
+
+def summarize()
+    if $verbose
+        puts "minutes: #{$work_p.inject(:+)}"
+        puts "periods: #{$work_p.length}"
+        puts "mean: #{$work_p.mean}"
+        puts "median: #{$work_p.median}"
+        puts "shortest: #{$work_p.min}"
+        puts "longest: #{$work_p.max}"
+    else
+        puts $work_p.inject(:+)
+    end
+
+    if $very_verbose
+        puts $work_p
+    end
+#print summary (total, number of periods, avg & mean lengths, 
+#time from beg to end, % of that time working, 
+#avg & mean breaks, number of breaks
+    
+end
+
+MIN_P_HR = 60
+HR_P_DAY = 24
+$tdelim = /[ :-]+/
+$record_sep = /^\s*$/
+
+loop { case ARGV[0]
+    when '-v' then ARGV.shift; $verbose = true
+    when '-vv' then ARGV.shift; $very_verbose = true
+    when '-d' then ARGV.shift; $record_sep = ARGV.shift
+    when /--/ then ARGV.shift; break
+    when /^-/ then usage("Unknown option: #{ARGV[0].inspect}")
+    else break
+end; }
+
+$clock = "out"
+$work_p = Array.new
+time = Hash.new
+
+while gets() do
+    line = $_.chomp
+    if line =~ $record_sep
+        if $clock == "in"
+            warn "Poorly formed input: delimiter before end time at line #{$.}"
+        end
+        $clock = "out"
+    else
+        $clock = $clock == "in" ? "out" : "in"
+        time[$clock] = parsetime(line)
+
+        if $clock == "out"
+            accumulate(time["in"], time["out"])
+        end
+    end
+    
+end
+
+if $clock == "in"
+    warn "ended on $clock in at line #{NR}"
+end
+
+summarize()
+
+exit
