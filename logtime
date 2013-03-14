@@ -17,6 +17,13 @@ class Array
     end
 end
 
+class Fixnum
+    def as_hours
+        hours = (self / MIN_P_HR).to_i
+        rem = self % MIN_P_HR
+        return sprintf('%d:%02d', hours, rem)
+    end
+end
 
 def accumulate(start, stop)
     $work_p.push(((stop - start) * MIN_P_HR * HR_P_DAY ).to_i)
@@ -44,6 +51,7 @@ end
 def summarize()
     if $verbose
         puts "minutes: #{$work_p.inject(:+)}"
+        puts "hours: #{$work_p.inject(:+).as_hours}"
         puts "periods: #{$work_p.length}"
         puts "mean: #{$work_p.mean}"
         puts "median: #{$work_p.median}"
