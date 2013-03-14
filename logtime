@@ -50,8 +50,8 @@ end
 
 def summarize()
     if $verbose
-        puts "minutes: #{$work_p.inject(:+)}"
-        puts "hours: #{$work_p.inject(:+).as_hours}"
+        puts "as hours: #{$work_p.inject(:+).as_hours}"
+        puts "as minutes: #{$work_p.inject(:+)}"
         puts "periods: #{$work_p.length}"
         puts "mean: #{$work_p.mean}"
         puts "median: #{$work_p.median}"
@@ -80,7 +80,7 @@ $record_sep = /^\s*$/
 loop { case ARGV[0]
     when '-v' then ARGV.shift; $verbose = true
     when '-vv' then ARGV.shift; $very_verbose = true
-    when '-d' then ARGV.shift; $record_sep = ARGV.shift
+    when '-r' then ARGV.shift; $record_sep = ARGV.shift
     when /--/ then ARGV.shift; break
     when /^-/ then usage("Unknown option: #{ARGV[0].inspect}")
     else break
@@ -109,7 +109,7 @@ while gets() do
 end
 
 if $clock == "in"
-    warn "ended on $clock in at line #{NR}"
+    warn "ended on clock in at line #{NR}"
 end
 
 summarize()
