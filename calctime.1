@@ -10,10 +10,6 @@ logtime, calctime \- log and calculate time intervals
 calculates time intervals from a list of start and stop times,
 one per line,
 presented on standard in or from a file.
-Optional delimiter lines may separate stop times from start times.
-Delimiter lines may be specified by a regex, 
-but otherwise default to blanks,
-or only spaces or hyphens.
 Output defaults to minutes.
 .sp
 .B logtime
@@ -21,11 +17,20 @@ is not yet implemented,
 but is intended to create files appropriate for use by
 .SH INPUT FORMAT
 Acceptable time format is:
-.B YYYY-[M]M-[D]D-[h]h-[m]m-[AM|PM]
+.B YYYY-[M]M-[D]D-[h]h-[m]m-[AM|PM]  [# COMMENT]
 \(em that is,
 zero\(hypadding is optional,
-12 or 24 hours are acceptable (but 12 hours must have AM or PM),
+12 or 24 hour formats are acceptable (but 12 hours must have AM or PM),
 and where '-' is any of space, colon, or hyphen.
+A time may be followed by a comment, 
+which is disregarded.
+Optional delimiter lines may separate stop times from start times.
+Delimiter lines may be specified by a regex, 
+but otherwise default to blanks,
+or only spaces or hyphens.
+Comment lines begin with a hash,
+or spaces followed by a hash.
+They may appear anywhere and are disregarded entirely.
 .SH calctime OPTIONS
 .B -v
 be verbose \(em

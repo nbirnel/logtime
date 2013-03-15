@@ -89,13 +89,15 @@ $work_p = Array.new
 time = Hash.new
 
 while gets() do
+    next if $_ =~ /^\s*#/
     line = $_.chomp
     if line =~ $record_sep
         if $clock == "in"
-            warn "Poorly formed input: delimiter before end time at line #{$.}"
+            warn "Delimiter before end time at line #{$.}"
         end
         $clock = "out"
     else
+        line.sub!(/#.*$/, "")
         $clock = $clock == "in" ? "out" : "in"
         time[$clock] = parsetime(line)
 
@@ -103,7 +105,6 @@ while gets() do
             accumulate(time["in"], time["out"])
         end
     end
-    
 end
 
 if $clock == "in"
