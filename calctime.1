@@ -1,21 +1,49 @@
 .TH logtime 1 logtime\-0.0.1
 .SH NAME
-logtime, calctime \- log and calculate billable hours
+logtime, calctime \- log and calculate time intervals
 .SH SYNOPSIS
-.B calctime [OPTIONS] FILE 
-.br
 .B logtime [OPTIONS] FILE
+.br
+.B calctime [OPTIONS] FILE 
 .SH DESCRIPTION
-.B 
+.B calctime 
+calculates time intervals from a list of start and stop times,
+one per line,
+presented on standard in or from a file.
+Optional delimiter lines may separate stop times from start times.
+Delimiter lines may be specified by a regex, 
+but otherwise default to blanks,
+or only spaces or hyphens.
+Output defaults to minutes.
+.sp
 .B logtime
-!WHAT IT DOES!
-.SH OPTIONS
-none
+is not yet implemented,
+but is intended to create files appropriate for use by
+.B calctime.
+.SH calctime OPTIONS
+.B -v
+be verbose \(em
+show results as hours, minutes, number of intervals, 
+and mean, median, and shortest lengths.
+.br
+.B -vv
+be very verbose \(em
+output each interval in minutes.
+This option is not exclusive of,
+and does not imply 
+.B -v.
+.br
+.B -r REGEXP
+Use
+.B REGEXP
+as a record separator between start\(hystop tuplets,
+rather than the default /^\\s*$/.
+Record separators are entirely optional, 
+but make reading the input file much easier.
 .SH EXAMPLES
-.B logtime 
-!INVOCATIONS!
 .SH FILES
 .SH SEE ALSO
+.B ruby(1)
 .SH BUGS
 Probably.
 .SH LICENSE
