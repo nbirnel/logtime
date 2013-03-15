@@ -19,7 +19,13 @@ Output defaults to minutes.
 .B logtime
 is not yet implemented,
 but is intended to create files appropriate for use by
-.B calctime.
+.SH INPUT FORMAT
+Acceptable time format is:
+.B YYYY-[M]M-[D]D-[h]h-[m]m-[AM|PM]
+\(em that is,
+zero\(hypadding is optional,
+12 or 24 hours are acceptable (but 12 hours must have AM or PM),
+and where '-' is any of space, colon, or hyphen.
 .SH calctime OPTIONS
 .B -v
 be verbose \(em
@@ -37,7 +43,7 @@ and does not imply
 Use
 .B REGEXP
 as a record separator between start\(hystop tuplets,
-rather than the default /^\\s*$/.
+rather than the default /^[-\\s]*$/.
 Record separators are entirely optional, 
 but make reading the input file much easier.
 .SH EXAMPLES

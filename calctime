@@ -39,6 +39,8 @@ def parsetime(timestr)
     t["h"] = a[3].to_i
     t["M"] = a[4].to_i
 
+    #FIXME check the hash, or the array?
+    
     if a.length == 6                               # AM or PM
         a[5] =~ /^([Pp]|[Aa])[Mm]$/ or warn "Bad 12 hour format at #{NR}"
         t["h"] = 0              if t["h"] == 12
@@ -71,7 +73,7 @@ end
 MIN_P_HR = 60
 HR_P_DAY = 24
 $tdelim = /[ :-]+/
-$record_sep = /^\s*$/
+$record_sep = /^[-\s]*$/
 
 loop { case ARGV[0]
     when '-v' then ARGV.shift; $verbose = true
