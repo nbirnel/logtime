@@ -1,9 +1,9 @@
 PROGS = calctime logtime
 PREFIX = /usr/local
 
-install : install-${progs}
+install : install-calctime install-logtime
 
-pdf : pdf-${progs}
+pdf : pdf-calctime pdf-logtime
 
 install-calctime :: calctime calctime.1
 	mkdir -p ${DESTDIR}${PREFIX}/bin
