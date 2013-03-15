@@ -7,9 +7,13 @@ log_check='calctime --check-status'
 
 check_status_vs() {
     new_status="$1"
-    old_status="$($log_check "$outfile")"
-    test $? -eq 0 ||\
-      die $? "$0: couldn't check status - $log_check died with status $?"
+    if test -e "$outfile"; then
+        old_status="$($log_check "$outfile")"
+        test $? -eq 0 ||\
+          die $? "$0: couldn't check status - $log_check died with status $?"
+    else
+        old_status="out"                  # new file, no need to check
+    fi
     test $new_status != $old_status
     return $?
 }
@@ -60,7 +64,7 @@ if [ -z "$outfile" ]; then
     shift
 fi
 
-if test ! "$force"; then
+if test ! "$force" ; then
     check_status_vs "$clock" ||\
       die $? "$0: trying to clock $clock with $outfile, already clocked $clock"
 fi
