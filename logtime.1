@@ -2,16 +2,42 @@
 .SH NAME
 logtime \- log time intervals
 .SH SYNOPSIS
-.B logtime [OPTIONS] FILE
+.B logtime [OPTIONS] b|e [FILE [MESSAGE]]
 .SH DESCRIPTION
 .B logtime
-is not yet implemented,
-but is intended to create files appropriate for use by
+logs the current time and an optional message to a 
+.B FILE
+in the logtime config directory
+(see
+.B FILES
+below).
+.B FILE 
+is intended to be parsed by 
+.B calctime(1),
+but is easily human readable.
 .SH OPTIONS
+.B e
+log end time.
+.br
+.B b
+log begin time.
+.br
+.B -f
+force \(em
+don't check if we are correctly starting or stopping an interval.
+.br
+.B -o FILE
+use 
+.B FILE
+as output file,
+rather than appending to the first argument in the config directory.
+.br
 .SH EXAMPLES
 .SH FILES
+.B $HOME/.config/logtime
+the directory where logfiles are stored by default.
 .SH SEE ALSO
-.B ruby(1)
+.B calctime(1)
 .SH BUGS
 Probably.
 .SH LICENSE
