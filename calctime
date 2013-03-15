@@ -73,6 +73,8 @@ end
 
 MIN_P_HR = 60
 HR_P_DAY = 24
+CONFIG = ENV['HOME'] + "/.config/logtime"
+
 $tdelim = /[ :-]+/
 $record_sep = /^[-\s]*$/
 $speak = true
