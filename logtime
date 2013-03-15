@@ -1,0 +1,52 @@
+#!/bin/sh
+
+config="$HOME/.config/logtime"
+test -d "$config" || mkdir -p "$config"
+USAGE="Usage: $(basename $0) [OPTIONS] b|e [MESSAGE]"
+
+die() {
+    status="$1"
+    shift
+    warn $@
+    exit "$status"
+}
+
+warn() {
+    echo $@ 1>&2
+}
+
+while [ $# -gt 1 ]; do
+    case "$1" in
+      -f)
+        outfile="$2"
+        shift 2
+        break
+        ;;
+      b*)
+        clock="in"
+        shift 1
+        ;;
+      e*)
+        clock="out"
+        shift 1
+        ;;
+      -*)
+        die 1 "flag $1 not recognized"
+        ;;
+      *)
+        break
+        ;;
+    esac
+done
+
+test -n "$clock" || die 1 $USAGE
+
+if [ -z "$outfile" ]; then
+    outfile="$config/$1"
+    shift
+fi
+
+test $# -gt 0 && comment='# '"$@"
+
+echo "$(date '+%Y-%m-%d %I:%M %p')" $comment >>"$outfile"
+test $clock = "out" && echo "--------------------" >>"$outfile"
