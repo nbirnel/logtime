@@ -39,13 +39,10 @@ def parsetime(timestr)
     t["h"] = a[3].to_i
     t["M"] = a[4].to_i
 
-    if a.length == 6     # AM or PM
-        if t["h"] == 12
-            t["h"] = 0
-        end
-        if a[5] == "PM"
-            t["h"] = t["h"] + 12
-        end
+    if a.length == 6                               # AM or PM
+        a[5] =~ /^([Pp]|[Aa])[Mm]$/ or warn "Bad 12 hour format at #{NR}"
+        t["h"] = 0              if t["h"] == 12
+        t["h"] = t["h"] + 12    if a[5]   == "PM"
     end
 
     return DateTime.new(t["y"], t["m"], t["d"], t["h"], t["M"] ) 
