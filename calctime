@@ -80,7 +80,7 @@ $record_sep = /^[-\s]*$/
 $speak = true
 
 loop { case ARGV[0]
-    when '--check-status' then ARGV.shift; $speak = false
+    when '--status' then ARGV.shift; $speak = false
     when '-i' then ARGV.shift; $file = ARGV.shift
     when '-v' then ARGV.shift; $verbose = true
     when '-vv' then ARGV.shift; $very_verbose = true

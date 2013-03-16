@@ -3,7 +3,7 @@
 config="$HOME/.config/logtime"
 test -d "$config" || mkdir -p "$config"
 USAGE="Usage: $(basename $0) [OPTIONS] b|e [MESSAGE]"
-log_check='calctime --check-status'
+log_check='calctime --status'
 
 check_status_vs() {
     new_status="$1"
