@@ -5,12 +5,14 @@ logtime \- log time intervals
 .B logtime [OPTIONS] b|e [FILE [MESSAGE]]
 .SH DESCRIPTION
 .B logtime
-logs the current time and an optional message to a 
+logs the current time and an optional message to
 .B FILE
 in the logtime config directory
 (see
 .B FILES
-below).
+below, and 
+.B -o FILE
+).
 .B FILE 
 is intended to be parsed by 
 .B calctime(1),
@@ -27,12 +29,19 @@ force \(em
 don't check if we are correctly starting or stopping an interval.
 .br
 .B -o FILE
-use 
+write to 
 .B FILE
-as output file,
-rather than appending to the first argument in the config directory.
+(relative or absolute path)
+rather than the file in the config directory.
 .br
 .SH EXAMPLES
+logtime b work Now I am starting this project
+.br
+calctime --check-status work     # Not sure if I am clocked in or not
+.br
+logtime e work Now I finished the project
+.br
+calctime -v work
 .SH FILES
 .B $HOME/.config/logtime
 the directory where logfiles are stored by default.

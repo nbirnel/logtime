@@ -73,12 +73,15 @@ end
 
 MIN_P_HR = 60
 HR_P_DAY = 24
+CONFIG = ENV['HOME'] + "/.config/logtime/"
+
 $tdelim = /[ :-]+/
 $record_sep = /^[-\s]*$/
 $speak = true
 
 loop { case ARGV[0]
     when '--check-status' then ARGV.shift; $speak = false
+    when '-i' then ARGV.shift; $file = ARGV.shift
     when '-v' then ARGV.shift; $verbose = true
     when '-vv' then ARGV.shift; $very_verbose = true
     when '-r' then ARGV.shift; $record_sep = ARGV.shift
@@ -91,9 +94,12 @@ $clock = "out"
 $work_p = Array.new
 time = Hash.new
 
-while gets() do
-    next if $_ =~ /^\s*#/
-    line = $_.chomp
+#fixme allow stdin
+$file = CONFIG + ARGV.shift unless defined? $file
+
+File.open($file).each do |line|
+    next if line =~ /^\s*#/
+    line = line.chomp
     if line =~ $record_sep
         if $clock == "in"
             warn "Delimiter before end time at line #{$.}"
