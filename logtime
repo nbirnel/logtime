@@ -25,6 +25,11 @@ die() {
     exit "$status"
 }
 
+list_files() {
+    ls "$config/"
+    exit $?
+}
+
 warn() {
     echo $@ 1>&2
 }
@@ -34,6 +39,9 @@ while [ $# -gt 1 ]; do
       -f)
         force=1
         shift 1
+        ;;
+      -l)
+        list_files
         ;;
       -o)
         outfile="$2"

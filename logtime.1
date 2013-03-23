@@ -7,8 +7,7 @@ logtime \- log time intervals
 .B logtime
 logs the current time and an optional message to
 .B FILE
-in the logtime config directory
-(see
+(by default in the logtime config directory \(em see
 .B FILES
 below, and 
 .B -o FILE
@@ -28,11 +27,19 @@ log begin time.
 force \(em
 don't check if we are correctly starting or stopping an interval.
 .br
+.B -l
+list files \(em
+list the log files in 
+.B $HOME/.config/logtime
+and exit.
+.br
 .B -o FILE
 write to 
 .B FILE
 (relative or absolute path)
-rather than the file in the config directory.
+rather than 
+.B FILE
+in the config directory.
 .br
 .SH EXAMPLES
 logtime b work Now I am starting this project
