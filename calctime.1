@@ -8,10 +8,9 @@ calctime \- calculate time intervals from
 .B calctime 
 calculates time intervals from a list of start and stop times,
 one per line,
-presented on standard in or from
+from
 .B FILE
-in the logtime config directory
-(see
+(by default in the logtime config directory \(em see
 .B FILES
 below, and 
 .B -i FILE
@@ -32,9 +31,10 @@ Optional delimiter lines may separate stop times from start times.
 Delimiter lines may be specified by a regex, 
 but otherwise default to blanks,
 or only spaces or hyphens.
-Comment lines begin with a hash,
+Comment lines begin with a hash
+.B #,
 or spaces followed by a hash.
-They may appear anywhere and are disregarded entirely.
+Comments may appear anywhere and are disregarded entirely.
 .SH OPTIONS
 .B --status
 put whether the last clock was "in" or "out" on standard out.
@@ -46,7 +46,9 @@ Mostly intended for scripting rather than interactive use.
 read 
 .B FILE
 (relative or absolute path)
-rather than the file in the config directory.
+rather than 
+.B FILE
+in the config directory.
 .br
 .B -v
 be verbose \(em

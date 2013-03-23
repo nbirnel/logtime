@@ -27,14 +27,14 @@ die() {
 
 list_files() {
     ls "$config/"
-    exit $?
+    return $?
 }
 
 warn() {
     echo $@ 1>&2
 }
 
-while [ $# -gt 1 ]; do
+while [ $# -gt 0 ]; do
     case "$1" in
       -f)
         force=1
@@ -42,6 +42,7 @@ while [ $# -gt 1 ]; do
         ;;
       -l)
         list_files
+        exit $?
         ;;
       -o)
         outfile="$2"

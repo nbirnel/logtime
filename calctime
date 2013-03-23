@@ -116,11 +116,10 @@ File.open($file).each do |line|
     end
 end
 
-if $clock == "in" and $speak
-    warn "ended on clock in at line #{$.}"
-end
-
 if $speak
+    if $clock == "in"
+        warn "ended on clock in at line #{$.}"
+    end
     summarize()
 else
     puts $clock
