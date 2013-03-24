@@ -3,10 +3,12 @@
 require 'date'
 
 class Errors
-    START_AFTER_STOP = 128
-    BAD_12_HR = 256
-    END_ON_CLOCK_IN = 512
-    DELIM_OOO = 1024
+    BAD_12_HR = 2
+    BAD_FLAG = 4
+    DELIM_OOO = 8
+    END_ON_CLOCK_IN = 16
+    NO_FILE = 32
+    START_AFTER_STOP = 64
 end
 
 class Array
@@ -36,7 +38,7 @@ end
 def accumulate(start, stop)
     if start > stop
         warn "start after stop at line #{$.}"
-        $exit_status = $exit_status | Errors::START_AFTER_STOP
+        $errs = $errs | Errors::START_AFTER_STOP
     end
     $work_p.push(((stop - start) * MIN_P_HR * HR_P_DAY ).to_i)
 end
@@ -56,7 +58,7 @@ def parsetime(timestr)
     if a.length == 6                               # AM or PM
         if a[5] !~ /^([Pp]|[Aa])[Mm]$/ 
             warn "Bad 12 hour format at #{$.}"
-            $exit_status = $exit_status | Errors::BAD_12_HR
+            $errs = $errs | Errors::BAD_12_HR
         end
 
         t["h"] = 0              if t["h"] == 12
@@ -93,7 +95,7 @@ CONFIG = ENV['HOME'] + "/.config/logtime/"
 $tdelim = /[ :-]+/
 $record_sep = /^[-\s]*$/
 $speak = true
-$exit_status = 0
+$errs = 0
 
 loop { case ARGV[0]
     when '--status' then ARGV.shift; $speak = false
@@ -102,7 +104,9 @@ loop { case ARGV[0]
     when '-vv' then ARGV.shift; $very_verbose = true
     when '-r' then ARGV.shift; $record_sep = ARGV.shift
     when '--' then ARGV.shift; break
-    when /^-/ then usage("Unknown option: #{ARGV[0].inspect}")
+    when /^-/ 
+        $errs = $errs | Errors::BAD_FLAG
+        usage("Unknown option: #{ARGV[0].inspect}")
     else break
 end; }
 
@@ -113,13 +117,15 @@ time = Hash.new
 #fixme allow stdin
 $file = CONFIG + ARGV.shift unless defined? $file
 
+File.file?($file) or $errs = $errs | Errors::NO_FILE; exit $errs
+
 File.open($file).each do |line|
     next if line =~ /^\s*#/
     line = line.chomp
     if line =~ $record_sep
         if $clock == "in"
             warn "Delimiter before end time at line #{$.}"
-            $exit_status = $exit_status | Errors::DELIM_OOO
+            $errs = $errs | Errors::DELIM_OOO
         end
         $clock = "out"
     else
@@ -136,11 +142,11 @@ end
 if $speak
     if $clock == "in"
         warn "ended on clock in at line #{$.}"
-        $exit_status = $exit_status | Errors::END_ON_CLOCK_IN
+        $errs = $errs | Errors::END_ON_CLOCK_IN
     end
     summarize()
 else
     puts $clock
 end
 
-exit
+exit $errs
