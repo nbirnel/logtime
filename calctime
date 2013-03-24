@@ -31,8 +31,7 @@ class Err
     BAD_FLAG = 4
     DELIM_OOO = 8
     END_ON_CLOCK_IN = 16
-    NOT_TIME = 32
-    START_GT_STOP = 64
+    START_GT_STOP = 32
 end
 
 def accumulate(start, stop)
