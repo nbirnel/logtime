@@ -2,6 +2,13 @@
 
 require 'date'
 
+class Errors
+    START_AFTER_STOP = 128
+    BAD_12_HR = 256
+    END_ON_CLOCK_IN = 512
+    DELIM_OOO = 1024
+end
+
 class Array
     def sum
         inject(nil) { |sum, x| sum ? sum+x : x }
@@ -27,6 +34,10 @@ class Fixnum
 end
 
 def accumulate(start, stop)
+    if start > stop
+        warn "start after stop at line #{$.}"
+        $exit_status = $exit_status | Errors::START_AFTER_STOP
+    end
     $work_p.push(((stop - start) * MIN_P_HR * HR_P_DAY ).to_i)
 end
 
@@ -43,7 +54,11 @@ def parsetime(timestr)
     #FIXME check the hash, or the array?
     
     if a.length == 6                               # AM or PM
-        a[5] =~ /^([Pp]|[Aa])[Mm]$/ or warn "Bad 12 hour format at #{$.}"
+        if a[5] !~ /^([Pp]|[Aa])[Mm]$/ 
+            warn "Bad 12 hour format at #{$.}"
+            $exit_status = $exit_status | Errors::BAD_12_HR
+        end
+
         t["h"] = 0              if t["h"] == 12
         t["h"] = t["h"] + 12    if a[5]   == "PM"
     end
@@ -78,6 +93,7 @@ CONFIG = ENV['HOME'] + "/.config/logtime/"
 $tdelim = /[ :-]+/
 $record_sep = /^[-\s]*$/
 $speak = true
+$exit_status = 0
 
 loop { case ARGV[0]
     when '--status' then ARGV.shift; $speak = false
@@ -103,6 +119,7 @@ File.open($file).each do |line|
     if line =~ $record_sep
         if $clock == "in"
             warn "Delimiter before end time at line #{$.}"
+            $exit_status = $exit_status | Errors::DELIM_OOO
         end
         $clock = "out"
     else
@@ -119,6 +136,7 @@ end
 if $speak
     if $clock == "in"
         warn "ended on clock in at line #{$.}"
+        $exit_status = $exit_status | Errors::END_ON_CLOCK_IN
     end
     summarize()
 else
