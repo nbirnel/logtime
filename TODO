@@ -1,0 +1,14 @@
+Add rounding to calctime (per period)
+calctime -r 5       #round to nearest 5 minutes
+calctime -r +5      #round up to closest 5 minutes
+calctime -r -15     #round down to closest 15 minutes
+
+Add minimum period to calctime (per period)
+calctime -R 5       #anything under 5 minutes billed as 5 minutes
+
+Add 'where' (like man -w) to calctime or logtime?
+Add 'cat-like' flag to calctime or logtime? - redundant, but handy.
+Add flag to show logfile comments in calctime output
+
+Add parsing of time between billable sessions.
+
