@@ -2,15 +2,6 @@
 
 require 'date'
 
-class Errors
-    BAD_12_HR = 2
-    BAD_FLAG = 4
-    DELIM_OOO = 8
-    END_ON_CLOCK_IN = 16
-    NO_FILE = 32
-    START_AFTER_STOP = 64
-end
-
 class Array
     def sum
         inject(nil) { |sum, x| sum ? sum+x : x }
@@ -33,6 +24,15 @@ class Fixnum
         rem = self % MIN_P_HR
         return sprintf('%d:%02d', hours, rem)
     end
+end
+
+class Errors
+    BAD_12_HR = 2
+    BAD_FLAG = 4
+    DELIM_OOO = 8
+    END_ON_CLOCK_IN = 16
+    NO_FILE = 32
+    START_AFTER_STOP = 64
 end
 
 def accumulate(start, stop)
