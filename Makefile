@@ -3,8 +3,6 @@ PREFIX = /usr/local
 
 install : install-calctime install-logtime
 
-pdf : pdf-calctime pdf-logtime
-
 install-calctime :: calctime calctime.1
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f calctime ${DESTDIR}${PREFIX}/bin
@@ -20,17 +18,6 @@ install-logtime :: logtime logtime.1
 	mkdir -p ${DESTDIR}${PREFIX}/man/man1
 	cp -f logtime.1 ${DESTDIR}${PREFIX}/man/man1
 	chmod 644 ${DESTDIR}${PREFIX}/man/man1/logtime.1
-
-pdf-calctime :: calctime.1
-	man -t ./calctime.1 > calctime.ps
-	ps2pdf calctime.ps
-
-pdf-logtime :: logtime.1
-	man -t ./logtime.1 > logtime.ps
-	ps2pdf logtime.ps
-
-clean ::
-	rm -r logtime.ps calctime.ps
 
 remove ::
 	rm -f ${DESTDIR}${PREFIX}/bin/calctime
