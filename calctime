@@ -71,6 +71,12 @@ def summarize()
     end
 end
 
+def usage(message)
+    warn "#{$0} USAGE: #{File.basename($0)} [OPTIONS] [FILE]"
+    warn message
+    exit 
+end
+
 MIN_P_HR = 60
 HR_P_DAY = 24
 CONFIG = ENV['HOME'] + "/.config/logtime/"
