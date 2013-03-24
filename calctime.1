@@ -36,12 +36,13 @@ Comment lines begin with a hash
 or spaces followed by a hash.
 Comments may appear anywhere and are disregarded entirely.
 .SH OPTIONS
+.LP
 .B --status
 put whether the last clock was "in" or "out" on standard out.
 Put errors on standard error, 
 but do not produce any other output.
 Mostly intended for scripting rather than interactive use.
-.br
+.LP
 .B -i FILE
 read 
 .B FILE
@@ -49,19 +50,19 @@ read
 rather than 
 .B FILE
 in the config directory.
-.br
+.LP
 .B -v
 be verbose \(em
 show results as hours, minutes, number of intervals, 
 and mean, median, and shortest lengths.
-.br
+.LP
 .B -vv
 be very verbose \(em
 output each interval in minutes.
 This option is not exclusive of,
 and does not imply, 
 .B -v.
-.br
+.LP
 .B -r REGEXP
 Use
 .B REGEXP
@@ -72,6 +73,14 @@ but make reading the input file much easier.
 .SH EXAMPLES
 see
 .B logtime(1)
+.SH EXIT STATUS
+.LP
+ BAD_12_HR = 2
+ BAD_FLAG = 4
+ DELIM_OOO = 8
+ END_ON_CLOCK_IN = 16
+ NO_FILE = 32
+ START_AFTER_STOP = 64
 .SH FILES
 .B $HOME/.config/logtime
 the directory where logfiles are stored by default.
