@@ -75,7 +75,7 @@ if [ -z "$outfile" ]; then
     shift
 fi
 
-if test ! "$edit" ; then
+if [ "$edit" ]; then
     $VISUAL "$outfile"
     exit $?
 fi
