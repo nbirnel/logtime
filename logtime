@@ -36,6 +36,10 @@ warn() {
 
 while [ $# -gt 0 ]; do
     case "$1" in
+      --edit)
+        edit=1
+        shift 1
+        ;;
       -f)
         force=1
         shift 1
@@ -66,12 +70,17 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-test -n "$clock" || die 1 $USAGE
-
 if [ -z "$outfile" ]; then
     outfile="$config/$1"
     shift
 fi
+
+if test ! "$edit" ; then
+    $VISUAL "$outfile"
+    exit $?
+fi
+
+test -n "$clock" || die 1 $USAGE
 
 if test ! "$force" ; then
     check_status_vs "$clock" ||\
