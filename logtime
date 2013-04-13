@@ -70,6 +70,8 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+#FIXME check if we even have $1
+#FIXME add s 'switch tasks' - exit $outfile, then $0 b "$@"
 if [ -z "$outfile" ]; then
     outfile="$config/$1"
     shift
