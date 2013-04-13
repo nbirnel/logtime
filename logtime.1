@@ -2,7 +2,7 @@
 .SH NAME
 logtime \- a simple time clock for personal use
 .SH SYNOPSIS
-.B logtime [OPTIONS] b|e [FILE [MESSAGE]]
+.B logtime b|e|s|--edit|-l [OPTIONS] [FILE [MESSAGE]]
 .SH DESCRIPTION
 .B logtime
 logs the current time and an optional message to
@@ -16,26 +16,34 @@ below, and
 is intended to be parsed by 
 .B calctime(1),
 but is easily human readable.
-.SH OPTIONS
+.SH COMMANDS
 .B e
 log end time.
 .br
 .B b
 log begin time.
 .br
+.B s
+switch logs \(em
+log end time for
+.B FILE, 
+and log begin time with the remaining arguments.
+.br
 .B --edit FILE
 edit 
 .B FILE
-.br
-.B -f
-force \(em
-don't check if we are correctly starting or stopping an interval.
+and exit.
 .br
 .B -l
 list files \(em
 list the log files in 
 .B $HOME/.config/logtime
 and exit.
+.br
+.SH OPTIONS
+.B -f
+force \(em
+don't check if we are correctly starting or stopping an interval.
 .br
 .B -o FILE
 write to 

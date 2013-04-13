@@ -2,7 +2,7 @@
 
 config="$HOME/.config/logtime"
 test -d "$config" || mkdir -p "$config"
-USAGE="Usage: $(basename $0) [OPTIONS] b|e [MESSAGE]"
+USAGE="Usage: $(basename $0) b|e|s|--edit|-l [OPTIONS] [FILE [MESSAGE]]"
 log_check='calctime --status -i'
 
 check_status_vs() {
@@ -36,30 +36,45 @@ warn() {
 
 while [ $# -gt 0 ]; do
     case "$1" in
+      b*)
+        clock="in"
+        break
+        ;;
+      e*)
+        clock="out"
+        break
+        ;;
+      s*)
+        switch=1
+        clock="out"
+        break
+        ;;
       --edit)
         edit=1
-        shift 1
-        ;;
-      -f)
-        force=1
-        shift 1
+        break
         ;;
       -l)
         list_files
         exit $?
         ;;
+      *)
+        die 1 "$USAGE: command $1 not recognized"
+        ;;
+    esac
+done
+
+shift 1
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+      -f)
+        force=1
+        shift 1
+        ;;
       -o)
         outfile="$2"
         shift 2
         break
-        ;;
-      b*)
-        clock="in"
-        shift 1
-        ;;
-      e*)
-        clock="out"
-        shift 1
         ;;
       -*)
         die 1 "$0: flag $1 not recognized"
@@ -70,9 +85,8 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-#FIXME check if we even have $1
-#FIXME add s 'switch tasks' - exit $outfile, then $0 b "$@"
 if [ -z "$outfile" ]; then
+    test $# -gt 0 || die 1 $USAGE "Must specify FILE"
     outfile="$config/$1"
     shift
 fi
@@ -82,17 +96,17 @@ if [ "$edit" ]; then
     exit $?
 fi
 
-test -n "$clock" || die 1 $USAGE
+test -n "$clock" || die 1 $USAGE "clocking in or out?"
 
 if test ! "$force" ; then
     check_status_vs "$clock" ||\
       die $? "$0: trying to clock $clock with $outfile, already clocked $clock"
 fi
 
-test $# -gt 0 && comment='# '"$@"
-
 echo "$(date '+%Y-%m-%d %I:%M %p')" $comment >>"$outfile"
 
 if test $clock = "out"; then
     echo "--------------------" >>"$outfile"
 fi
+
+test -n "$switch" && exec $0 b "$@"
