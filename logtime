@@ -26,6 +26,8 @@ die() {
 }
 
 list_files() {
+    echo "Files in:"
+    echo "$config"
     ls -1 "$config/"
     return $?
 }
@@ -33,6 +35,8 @@ list_files() {
 warn() {
     echo $@ 1>&2
 }
+
+test $# -gt 0 || die 1 "$USAGE: You must provide a command."
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -86,7 +90,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$outfile" ]; then
-    test $# -gt 0 || die 1 $USAGE "Must specify FILE"
+    test $# -gt 0 || die 1 "$USAGE You must specify a FILE"
     outfile="$config/$1"
     shift
 fi
@@ -96,7 +100,7 @@ if [ "$edit" ]; then
     exit $?
 fi
 
-test -n "$clock" || die 1 $USAGE "clocking in or out?"
+test -n "$clock" || die 1 "$USAGE: clocking in or out?"
 
 if test ! "$force" ; then
     check_status_vs "$clock" ||\
