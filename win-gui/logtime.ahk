@@ -1,10 +1,8 @@
 #NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
 
-EnvGet, hd, HOMEDRIVE
-EnvGet, hp, HOMEPATH
-config = %hd%%hp%\.config\logtime
+EnvGet, u, USERPROFILE
+config = %u%\.config\logtime
 FileCreateDir, %config%
-
 
 Menu, TRAY, add
 Menu, TRAY, add, Project Clipboard &Help, help
