@@ -41,3 +41,28 @@ pop_up() {
     return
 }
 
+about_handler:
+aboutmsg = 
+(
+logtime Copyright 2013 Noah Birnel (nbirnel at gmail dot com)
+This is free software. You are licensed to do whatever you want with it.
+)
+MsgBox %aboutmsg%
+return
+
+exit_handler:
+ExitApp
+return
+
+gui_handler:
+pop_up()
+return
+
+help_handler:
+helpmsg = 
+(
+FIXME  there is no help yet 
+)
+MsgBox %helpmsg%
+return
+
