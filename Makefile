@@ -23,10 +23,4 @@ push :
 pull :
 	git pull origin master
 
-readme :: README.md
-	git commit -m'update $?' $?
-
-README.md :: ${PROG}.1
-	groff -tman -Thtml $? | sed '/<html/,$$!d; /<style/,/<\/style>/d' >$@
-
 .PHONY : install uninstall push pull readme
