@@ -17,4 +17,16 @@ deinstall :
 	rm -f ${DESTDIR}${PREFIX}/bin/logtime
 	rm -f ${DESTDIR}${PREFIX}/man/man1/logtime.1
 
-.PHONY : deinstall install $(PROGS) 
+push :
+	git push origin master
+
+pull :
+	git pull origin master
+
+readme :: README.md
+	git commit -m'update $?' $?
+
+README.md :: ${PROG}.1
+	groff -tman -Thtml $? | sed '/<html/,$$!d; /<style/,/<\/style>/d' >$@
+
+.PHONY : install uninstall push pull readme
