@@ -104,12 +104,12 @@ $speak = true
 $errs = 0
 
 loop { case ARGV[0]
-    when '--status' then ARGV.shift; $speak = false
-    when '-i' then ARGV.shift; $file = ARGV.shift
-    when '-v' then ARGV.shift; $verbose = true
-    when '-vv' then ARGV.shift; $very_verbose = true
-    when '-r' then ARGV.shift; $record_sep = ARGV.shift
-    when '--' then ARGV.shift; break
+    when '--status' then ARGV.shift; $speak        = false
+    when '-i'       then ARGV.shift; $file         = ARGV.shift
+    when '-v'       then ARGV.shift; $verbose      = true
+    when '-vv'      then ARGV.shift; $very_verbose = true
+    when '-r'       then ARGV.shift; $record_sep   = ARGV.shift
+    when '--'       then ARGV.shift; break
     when /^-/ 
         err_warn(Err::BAD_FLAG, "Unknown option: #{ARGV[0].inspect}")
     else break
