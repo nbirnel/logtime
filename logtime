@@ -113,5 +113,7 @@ if test $clock = "out"; then
     echo "--------------------" >>"$outfile"
 fi
 
-# FIXME this exits non-zero if we are not switching
 test -n "$switch" && exec $0 b "$@"
+
+# Otherwise the above test would exit non-zero if we are not switching
+exit
